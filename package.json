@@ -1,7 +1,7 @@
 {
   "name": "markitdown-skill",
-  "version": "1.0.0",
-  "description": "OpenClaw agent skill for converting documents to Markdown - PDF, Word, Excel, images, audio, YouTube",
+  "version": "1.0.1",
+  "description": "OpenClaw agent skill - documentation and utilities for Microsoft's MarkItDown library",
   "author": "Karman Verma",
   "license": "MIT",
   "repository": {

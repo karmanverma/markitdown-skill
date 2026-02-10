@@ -1,44 +1,41 @@
 ---
-name: markitdown
-description: OpenClaw agent skill for converting documents to Markdown. Supports PDF, Word, PowerPoint, Excel, images (OCR), audio (transcription), HTML, YouTube, and more. Use instead of curl/wget for fetching documentation.
+name: markitdown-skill
+description: OpenClaw agent skill for converting documents to Markdown. Documentation and utilities for Microsoft's MarkItDown library. Supports PDF, Word, PowerPoint, Excel, images (OCR), audio (transcription), HTML, YouTube.
 metadata:
   openclaw:
     emoji: "📄"
     homepage: https://github.com/karmanverma/markitdown-skill
     requires:
-      bins: ["python3", "pip"]
+      bins: ["python3", "pip", "markitdown"]
     install:
-      - id: "python"
+      - id: "markitdown"
         kind: "pip"
         package: "markitdown[all]"
         bins: ["markitdown"]
-        label: "Install MarkItDown (pip)"
+        label: "Install MarkItDown CLI (pip)"
 ---
 
-# MarkItDown
+# MarkItDown Skill
 
-OpenClaw agent skill for converting documents to Markdown.
+Documentation and utilities for converting documents to Markdown using Microsoft's [MarkItDown](https://github.com/microsoft/markitdown) library.
 
-**Built by:** [Microsoft AutoGen Team](https://github.com/microsoft/markitdown)
+> **Note:** This skill provides documentation and a batch script. The actual conversion is done by the `markitdown` CLI/library installed via pip.
 
 ## When to Use
 
-**ALWAYS use markitdown for:**
-- 📄 Fetching documentation (README, API docs, guides)
-- 🌐 Web scraping (clean markdown from web pages)
+**Use markitdown for:**
+- 📄 Fetching documentation (README, API docs)
+- 🌐 Converting web pages to markdown
 - 📝 Document analysis (PDFs, Word, PowerPoint)
 - 🎬 YouTube transcripts
 - 🖼️ Image text extraction (OCR)
 - 🎤 Audio transcription
 
-**Use markitdown INSTEAD of curl/wget for documentation!**
-
 ## Quick Start
 
 ```bash
 # Convert file to markdown
-markitdown document.pdf > output.md
-markitdown presentation.pptx -o output.md
+markitdown document.pdf -o output.md
 
 # Convert URL
 markitdown https://example.com/docs -o docs.md
@@ -56,16 +53,17 @@ markitdown https://example.com/docs -o docs.md
 | Audio | Speech transcription |
 | HTML | Structure preservation |
 | YouTube | Video transcription |
-| CSV/JSON/XML | Text formats |
-| ZIP | Iterates contents |
 
 ## Installation
 
-```bash
-# All features
-pip install 'markitdown[all]'
+The skill requires Microsoft's `markitdown` CLI:
 
-# Specific formats
+```bash
+pip install 'markitdown[all]'
+```
+
+Or install specific formats only:
+```bash
 pip install 'markitdown[pdf,docx,pptx]'
 ```
 
@@ -83,15 +81,13 @@ markitdown document.pdf -o document.md
 
 ### Batch Convert
 ```bash
-for file in docs/*.pdf; do
-  markitdown "$file" -o "markdown/${file%.pdf}.md"
-done
-```
+# Using included script
+python ~/.openclaw/skills/markitdown/scripts/batch_convert.py docs/*.pdf -o markdown/ -v
 
-### YouTube Transcript
-```bash
-pip install 'markitdown[youtube-transcription]'
-markitdown "https://youtube.com/watch?v=VIDEO_ID" -o transcript.md
+# Or shell loop
+for file in docs/*.pdf; do
+  markitdown "$file" -o "${file%.pdf}.md"
+done
 ```
 
 ## Python API
@@ -106,11 +102,9 @@ print(result.text_content)
 
 ## Troubleshooting
 
-### Missing Dependencies
+### "markitdown not found"
 ```bash
-pip install 'markitdown[pdf]'   # For PDFs
-pip install 'markitdown[docx]'  # For Word
-pip install 'markitdown[pptx]'  # For PowerPoint
+pip install 'markitdown[all]'
 ```
 
 ### OCR Not Working
@@ -122,8 +116,17 @@ sudo apt-get install tesseract-ocr
 brew install tesseract
 ```
 
+## What This Skill Provides
+
+| Component | Source |
+|-----------|--------|
+| `markitdown` CLI | Microsoft's pip package |
+| `markitdown` Python API | Microsoft's pip package |
+| `scripts/batch_convert.py` | This skill (utility) |
+| Documentation | This skill |
+
 ## See Also
 
-- [USAGE-GUIDE.md](USAGE-GUIDE.md) - Detailed examples and patterns
+- [USAGE-GUIDE.md](USAGE-GUIDE.md) - Detailed examples
 - [reference.md](reference.md) - Full API reference
-- [GitHub](https://github.com/microsoft/markitdown) - Official repo
+- [Microsoft MarkItDown](https://github.com/microsoft/markitdown) - Upstream library
